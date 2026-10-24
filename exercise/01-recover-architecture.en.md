@@ -38,15 +38,18 @@ Check **at least five** dependencies in Run B's table against the files. Open th
 
 | Caller → Callee | AI's evidence | Verified? ✅ / ❌ / ❓ | What you found |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
-| | | | |
-| | | | |
+| frontend → cartservice| system/online-boutique/kubernetes-manifests/frontend.yaml (CART_SERVICE_ADDR) | ✅ | name: CART_SERVICE_ADDR value: "cartservice:7070"|
+| frontend → checkoutservice| system/online-boutique/kubernetes-manifests/frontend.yaml (CHECKOUT_SERVICE_ADDR)|✅  | name: CHECKOUT_SERVICE_ADDR value: "checkoutservice:5050"|
+| checkoutservice → paymentservice| system/online-boutique/kubernetes-manifests/checkoutservice.yaml (PAYMENT_SERVICE_ADDR) | ✅ | name: PAYMENT_SERVICE_ADDR value: "paymentservice:50051"|
+| checkoutservice → emailservice| system/online-boutique/kubernetes-manifests/checkoutservice.yaml (EMAIL_SERVICE_ADDR) | ✅ | name: EMAIL_SERVICE_ADDR value: "emailservice:5000"|
+| cartservice → redis-cart| system/online-boutique/kubernetes-manifests/cartservice.yaml (REDIS_ADDR) | ✅ | name: REDIS_ADDR value: "redis-cart:6379"|
 
-- **Wrong or missing** in Run B (false dependencies, missing ones, containers to question): …
+- **Wrong or missing** in Run B (false dependencies, missing ones, containers to question): No incorrect connection from the 5 I checked.
 
 ## Reflect (2–3 sentences each)
 
 1. Compare A and B. What could the agent **not** know from the `.proto` file alone, and why?
+Run B could show which services were configured to connect to each other, but Run A only showed the service interfaces. This is because the .proto file defines available operations but doesn’t show which services call them.
 2. Which **one** mistake would mislead a new team member most if the diagram were published without checking?
+I didn’t find any mistakes in the five connections I checked, but leaving out the connection between cartservice and Redis could mislead a new team member about where cart data is stored. They might only check cartservice when investigating a cart problem.
+
