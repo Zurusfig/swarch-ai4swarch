@@ -1,4 +1,4 @@
-**Language:** [ภาษาไทย](02-write-adr.md) | English
+**Language:** [ภาษาไทย](02-write-adr.md) \| English
 
 # Task 2: Write an ADR for a new requirement (approximately 20 min)
 
@@ -10,6 +10,7 @@ Read [`docs/scenario.md`](../docs/scenario.md) first: requirement **R-12**, what
 For each run, start a **new chat or session** and send the message below. Replace `<paste R-12 here>` with the quoted R-12 block from the scenario.
 
 **Run a: zero-shot** → [`outputs/2a-adr.md`](outputs/2a-adr.md)
+
 ```
 Follow prompts/2-write-adr.md
 run: a
@@ -18,6 +19,7 @@ requirement: <paste R-12 here>
 ```
 
 **Run b: example + context** → [`outputs/2b-adr.md`](outputs/2b-adr.md)
+
 ```
 Follow prompts/2-write-adr.md
 run: b
@@ -32,23 +34,23 @@ requirement: <paste R-12 here>
 ## Compare a and b
 
 | Criterion | Run a | Run b |
-|---|---|---|
-| Uses the scenario's numbers (latency, peak, MailFast limits)? | | |
-| Options considered (list them) | | |
-| Handles "exactly once" loyalty points and MailFast's rate limit? How? | | |
-| Anything invented (a number, tool or fact not in the scenario)? | | |
+| --------- | ----- | ----- |
+| Uses the scenario's numbers (latency, peak, MailFast limits)? | X | / |
+| Options considered (list them) | Direct calls<br>Durable Events | Synchronous calls<br>durable jobs with a Go worker<br>RabbitMQ |
+| Handles "exactly once" loyalty points and MailFast's rate limit? How? | Prevents duplicate points but leaves MailFast’s limit open. | Prevents duplicate points and limits email requests to 50/s, including retries. |
+| Anything invented (a number, tool or fact not in the scenario)? | None | None |
 
 ## Take ownership: your final ADR
 
 You are the architect. Copy `outputs/2b-adr.md` to `docs/adr/0002-<short-title>.md` and edit it **yourself** until you would sign it. Don't ask the agent to do this part.
 
-- Fix anything wrong or invented, and add what is missing.
-- Make the final call yourself. You may disagree with the AI.
+* Fix anything wrong or invented, and add what is missing.
+* Make the final call yourself. You may disagree with the AI.
 
 You will defend this ADR in front of a review board in Part B, so make sure you can explain every decision in it.
 
 | # | What you changed from the AI's draft | Why |
-|---|---|---|
-| 1 | | |
-| 2 | | |
-| 3 | | |
+| --- | ------------------------------------ | --- |
+| 1 | I shortened repeated sections and used simpler wording. | I wanted the ADR to be easier to read and explain. |
+| 2 | I added my name and explained why I chose RabbitMQ. | I wanted to show that I understood and agreed with the decision. |
+| 3 | I clarified how messages would be delivered and acknowledged. | Retrying alone would not be enough to prevent lost work. |
